@@ -1,0 +1,7 @@
+<?php
+print_r(get_loaded_extensions());
+print_r(get_extension_funcs('imagick'));
+$ext = new ReflectionExtension('imagick');
+print_r($ext->getClasses());
+$img = new Imagick();
+print_r($img);

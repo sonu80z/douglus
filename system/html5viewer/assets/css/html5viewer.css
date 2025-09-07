@@ -1,0 +1,287 @@
+body{
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+	curse:default;
+
+}
+.viewer-layout canvas {
+	border:3px solid black;
+}
+.viewer-hud{
+	margin:5px;
+	font-size:8px;
+	position: absolute;
+	color:white;
+	background-color:black;
+}
+canvas.active{
+	border:3px solid yellow;
+}
+#debug{
+	font-size:6px;
+}
+.container-content{
+	background:#EFEFEF;
+}
+.tools li{
+	list-style:none;
+	display:inline-block;
+}
+.sidebar-nav .section-header{
+	display:block;
+	padding:0;
+	font-weight:600;
+	color:black;
+	margin-bottom:10px;
+}
+.patient-info label{
+	padding-left:30px;
+	display:inline;
+}
+.patient-info, .patient-info li{
+	padding:0;
+	margin:0;
+	list-style-type:none !important;
+	display:inline-block;
+}
+.patient-info li{
+	float:left;
+}
+.nav.tools li a {
+	margin:0;
+}
+.navbar-inverse .navbar-inner .navbar-text, .navbar-inverse .brand, .navbar-inverse .navbar-inner li a {
+	color:#FFF
+}
+.navbar-inverse .navbar-inner{
+	color:#FFF;
+	background-color: #73869E;
+	background-image: -moz-linear-gradient(top,#73869E,#516275);
+	background-image: -webkit-gradient(linear,0 0,0 100%,from(#73869E),to(#516275));
+	background-image: -webkit-linear-gradient(top,#73869E,#516275);
+	background-image: -o-linear-gradient(top,#73869E,#516275);
+	background-image: linear-gradient(to bottom,#73869E,#516275);
+	background-repeat: repeat-x;
+	border-color: #252525;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff#73869E',endColorstr='#ff516275',GradientType=0);
+	
+}
+.viewer-layout{
+
+}
+body {
+	background-color:#8B9096;
+}
+.canvas1 canvas{
+	width:100%;
+	height:100%;
+}
+.row-fluid{
+}
+.navbar .navbar-brand{
+	padding-bottom:5px;
+}
+.navbar .navbar-brand img{
+	float:left;
+}
+.breadcrumbs{
+	height:5px;
+	padding:0;
+	margin:0;
+	min-height:5px;
+}
+.breadcrumbs, .page-content{
+	background-color:#000 !important;
+}
+
+.next-image, .prev-image{
+	opacity:.25;
+}
+.next-image:hover, .prev-image:hover{
+	opacity:1;
+}
+.disabled{
+	color:gray;
+}
+.dropdown-navbar  li  a{
+	padding:0;
+	margin:0;
+}
+.dropdown-navbar{
+	width:500px;
+}
+.study-info-value{
+	font-weight: bold;
+}
+.fill{
+	width:100%;
+	height:100%;
+}
+.viewer-container{
+	position:absolute;width:88.5%;height:89%;margin-left:190px;
+}
+.viewer{
+	float:left;
+}
+#zoom-slider, #sharpness-slider{
+	margin:5px 15px 5px 15px;
+}
+.noUi-handle{background-color:#2c6aa0;border:none;box-shadow: inset 0 0 1px #595959,inset 0 1px 7px #595959,0 3px 6px -3px #595959;}
+.noUi-background {background-color:#393939;}
+/*media queries*/
+
+
+@media (max-width: 991px){
+	.breadcrumbs{
+		height:40px;
+	}
+
+	.viewer-container{
+		margin-left:0px;width:99%;height:92%
+	}
+}
+@media (max-width: 880px){
+	.viewer-hud{
+		margin-top:55px;
+	}
+	.navbar-text{
+		width:60%;
+	}
+	.navbar-links{
+		width:25%;
+	}
+	.navbar-text label, .navbar-links{
+		font-size:10px !important;
+	}
+	.study .nav-list{
+		height:100px;
+		overflow-y:scroll;
+	}
+
+
+}
+@media (max-width: 400px){
+	.navbar-text{
+		width:35%;
+	}
+	.navbar-links{
+		width:55%;
+	}
+	.navbar-inner{
+		padding:0;
+		margin:0;
+	}
+	.navbar-text label, .navbar-links{
+		font-size:10px !important;
+		padding-left:5px;
+	}
+	.well, .navbar{
+		padding:0;
+		margin-bottom:2px;
+	}
+	.study .nav-list{
+		height:70px;
+		overflow-y:scroll;
+	}
+	.viewer-layout{
+		margin-left:0px;
+
+	}
+	.patient-dob-label, .patient-dos-label, .patient-id-label{
+		display:none !important;
+	}
+}
+
+
+
+@font-face {
+	font-family: 'icomoon';
+	src:url('../fonts/icomoon.eot?oqfty8');
+	src:url('../fonts/icomoon.eot?#iefixoqfty8') format('embedded-opentype'),
+		url('../fonts/icomoon.woff?oqfty8') format('woff'),
+		url('../fonts/icomoon.ttf?oqfty8') format('truetype'),
+		url('../fonts/icomoon.svg?oqfty8#icomoon') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+	font-family: 'icomoon';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+.btn{
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+.icon-ruler-clear:before {
+	content: "\e601";
+}
+.icon-ruler:before {
+	content: "\e600";
+}
+.debug-window{
+	clear:both;
+}
+.debug-window .debug-log{
+	list-style:disc;
+	height:200px;
+	overflow:scroll;
+}
+.debug-coords table tr td, .debug-coords table tr th,.debug-center-calc table tr td, .debug-center-calc table tr th{
+	border:1px solid white;
+	padding:2px;
+}
+
+#actions{
+	position:absolute;
+	background-color:#3E972C;
+	text-align:center;
+	color:white;
+	padding:5px;
+	width:50%;
+	margin-left:25%;
+	z-index:100;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	/* IE 8 */
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+	/* IE 5-7 */
+	filter: alpha(opacity=80);
+	/* Netscape */
+	-moz-opacity: 0.8;
+	/* Safari 1.x */
+	-khtml-opacity: 0.8;
+	/* Good browsers */
+	opacity: 0.8;
+
+}
+
+.knob-container{
+	color:#FFF;
+	width:152px;
+	text-align: center;
+	font-weight:bold;
+	opacity:0.8;
+}
+.knob-container span{
+	display:block;
+	background-color:#222;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	margin-bottom:2px;
+}

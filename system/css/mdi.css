@@ -1,0 +1,112 @@
+html, body{height:100%; width:100%}
+/*ICONS START*/
+#window-admin-logs div.x-grid-cell-inner{ white-space: normal; }
+.ico-admin_remove_report{background-image:url(../ico/cut.png)}
+.ico-admin_remove_order{background-image:url(../ico/cut.png)}
+.ico-study-delete{background-image:url(../ico/book_delete.gif) !important;}
+.ico-study-export{background-image:url(../ico/book_export.gif) !important;}
+.ico-study-forward{background-image:url(../ico/book_go.gif) !important;}
+.ico-study-download{background-image:url(../ico/book_disk.gif) !important;}
+.ico-study-read{background-image:url(../ico/book_open.gif) !important;}
+.ico-study-unread{background-image:url(../ico/book_new.gif) !important;}
+.ico-study-view-report{background-image:url(../ico/page_white_acrobat.png) !important;}
+.ico-study-viewer{background-image:url(../ico/dicomViewer.gif) !important;}
+.ico-home{background-image:url(../ico/home.gif) !important;}
+.ico-date{background-image:url(../ico/date.gif) !important;}
+.ico-password{background-image:url(../ico/logout.gif) !important;}
+.ico-study{background-image:url(../ico/book.gif) !important;}
+.ico-filter{background-image:url(../ico/filter.gif) !important;}
+.ico-login{background-image:url(../ico/globe-icon.gif) !important;}
+.ico-study-note{background-image:url(../ico/page_white_text.png) !important;}
+.ico-study-attachment{background-image:url(../ico/attach.png) !important;}
+.ico-study-note-attachment{background-image:url(../ico/note-attachment.png) !important;}
+.ico-download{background-image:url(../ico/disk.png) !important;}
+.ico-history{background-image:url(../ico/time.gif) !important;}
+.ico-mail{background-image:url(../ico/mail.gif) !important;}
+.ico-review{background-image:url(../ico/review.gif) !important;}
+.ico-un-review{background-image:url(../ico/cancel.gif) !important;}
+.ico-batch-print{background-image:url(../ico/printer.gif) !important;}
+.ico-user-add{background-image:url(../ico/user_add.png) !important;}
+.ico-user-edit{background-image:url(../ico/user_edit.png) !important;}
+.ico-user-delete{background-image:url(../ico/user_delete.png) !important;}
+.ico-group-add{background-image:url(../ico/group_add.png) !important;}
+.ico-group-edit{background-image:url(../ico/group_edit.png) !important;}
+.ico-group-delete{background-image:url(../ico/group_delete.png) !important;}
+.ico-user-admin{background-image:url(../ico/group_gear.png) !important;}
+.ico-file-pdf{background-image:url(../ico/page_white_acrobat.png) !important;}
+.ico-preferences{background-image:url(../ico/preferences.png) !important;}
+.ico-user-login{background-image:url(../ico/user.gif) !important;}
+.ico-help{background-image:url(../ico/help.png) !important;}
+.ico-legend{background-image:url(../ico/legend.png) !important;}
+.ico-burncd{background-image:url(../ico/burncd.png) !important;}
+.ico-newstudy{background-image:url(../ico/add.png) !important;}
+.ico-critical{background-image:url(../ico/att.png) !important;}
+.ico-uncritical{background-image:url(../ico/uncritical.png) !important; background-repeat:no-repeat;}
+.ico-order{background-image:url(../ico/order.png) !important; background-repeat:no-repeat;}
+.ico-note{background-image:url(../ico/note.png) !important; background-repeat:no-repeat;height:16px;width:16px;}
+.ico-tech_note{background-image:url(../ico/tech_notes.png) !important; background-repeat:no-repeat;height:16px;width:16px;}
+.ico-admin-logs{background-image:url(../ico/logs.gif) !important; background-repeat:no-repeat;}
+.ico-emailed{background-image:url(../ico/emailed.png) !important;}
+.ico-eye-preview{height:20px;background-image:url(../ico/eye_preview.png) !important;}
+.ico-disk {
+    background-image: url(../ico/disk_79341.png) !important;
+}
+/*ICONS END*/
+
+/*LOADING MASK START*/
+#loading-mask{position:absolute;left:0;top:0;width:100%;height:100%;z-index:20000;background-color:white;}
+#loading{position:absolute;left:45%;top:30%;padding:2px;z-index:20001;height:auto;text-align:center;}
+#loading a {color:#225588;}
+#loading .loading-indicator{background:white;color:#444;font:bold 13px tahoma,arial,helvetica;padding:10px;margin:0;height:auto;}
+#loading-msg {font: normal 10px arial,tahoma,sans-serif;}
+#loading img{margin-right:8px;vertical-align:top;}
+/*LOADING MASK END*/
+
+/*UTILS START (basically used as helper classes used through out)*/
+.hide{display:none;}
+.clearfix{clear:both;}
+/*UTILS END*/
+
+/*LOGIN STATUS START*/
+
+#login-icon{float:left; margin-left:10px; background-repeat:no-repeat;}
+#login-status{margin:0px 15px 0px 20px;}
+/*LOGIN STATUS END*/
+
+/*x STYLES START*/
+/*#8999A6*/
+#study-header {background: #6F839A; float:left;width:100%;width: 85px; width: 100%; height: 85px;}
+.study-header-left{float:left;}
+.study-header-right{float:right;}
+.study-header-text{width: 100%; height:80px; font-family:arial,verdana,sans-serif; font-size:32px; font-weight:bold; font-style: italic; color:white; text-align: center;padding-top:18px; background-image: url('/img/header.png'); background-repeat: no-repeat; background-position:center}
+.study-header-text2{width: 100%;font-family:arial,verdana,sans-serif; font-size:20px; font-style: italic; color:white; text-align: center;padding-top:-20px;}
+/*HEADER STYLES END*/
+
+/*FOOTER STYLES START*/
+#study-footer div{
+	font-size:10px;padding-bottom:1px;padding-left:5px;padding-right:5px;font-family:Verdana;
+}
+/*FOOTER STYLES END*/
+
+/***********************************/
+/* DO NOT MODIFY ABOVE THIS LINE   */
+/* UNLESS YOU KNOW WHAT YOUR DOING */
+/***********************************/
+
+/*GRID STYLES START*/
+/*update this to change unread color in grid*/
+.study-unread div{font-weight:bold; color:#214c78;height:26px;}
+.study-reviewed div{font-weight:bold; color:green;height:26px;}
+.study-read div{font-weight:bold; color:#cc0000;height:26px;}
+/*GRID STYLES END */
+.redtext
+{
+	color:red;
+	font-weight:bold;
+        font-size:12.5pt;
+        font-family:sans-serif;
+        
+}
+#lpr2{margin-left:5px;}
+#maincont{background-color:orange;}
+#searchmain1, #searchmain2, #searchmain3, #searchmain4, #searchmain5, #searchmain6, #searchmain7, #searchmain8, #searchmain9, #clearSearchBtn {margin:2px;margin-left:4px;}

@@ -1,0 +1,6 @@
+/*Menu Fix (menu's were shifted to the right this will offset them */
+.x-menu-item-icon{left:-25px;}
+/*Fixes 20px white bar above the grid*/
+/*#study-grid{margin-top:-19px;}*/
+/*Fixes offset on the right side of the login status*/
+#login-status{margin-right:25px;}

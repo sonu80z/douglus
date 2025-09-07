@@ -1,0 +1,121 @@
+body
+{
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  border-top: 4px solid #2E74A7;
+  border-bottom: 4px solid #2E74A7;
+  font-family: "Open Sans", Helvetica, Arial, sans-serif;
+  background-color: #c9cbcd;
+}
+a
+{
+  color: #2E74A7;
+  font-weight: 700;
+  text-decoration: none;
+}
+a:hover
+{
+  text-decoration: underline;
+}
+strong
+{
+  font-weight: 700;
+}
+.Wrapper
+{
+  width: 950px;
+  margin: auto;
+  border: 2px solid #2E74A7;
+  border-top: none;
+  border-bottom: none;
+  background-color: #fff;
+}
+.Center, .ImgContainer
+{
+  width: 100%;
+  text-align: center;
+  margin-bottom: 30px;
+}
+.ImgContainer
+{
+  margin-bottom: 30px;
+}
+.TextContainer
+{
+  padding-left: 45px;
+  padding-right: 45px;
+  padding-bottom: 30px;
+}
+.TextContainer strong
+{
+  text-align: center;
+}
+li
+{
+  padding: 8px 0px;
+}
+.Divider
+{
+  width: 90%;
+  margin: auto;
+  border-top: 1px solid #777777;
+  margin-top: 15px;
+  margin-bottom: 25px;
+}
+.Copyright
+{
+  width: 100%;
+  text-align: center;
+  font-size: 10px;
+  color: #777777;
+  margin-bottom: 15px;
+}
+
+#loader
+{
+  width: 100%;
+  height: 430px;
+  background: url('Images/Loader.gif') no-repeat center center;
+  display: absolute;
+}
+
+#riaHelperNotFound,
+#startupEnhancerFound
+{
+  display: none;
+  height: 430px;
+}
+
+div#whatIsRIAH
+{
+  border-top: 1px solid #eaeaea;
+  border-bottom: 1px solid #eaeaea;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+#windowsRIAHelperLinksContainer,
+#osxRIAHelperLinksContainer,
+#linuxRIAHelperLinksContainer,
+#outdatedBrowserBrowserContainer
+{
+  display: none;
+}
+
+#riaHelperSuccInstalled
+{
+  display: none;
+}
+
+#bundlWarn
+{
+  padding-top: 15px;
+  font-size: .9em;
+  display: none;
+}
+
+div.tryAnyway
+{
+  padding-top: 10px;
+}
