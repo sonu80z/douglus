@@ -1,7 +1,8 @@
 <?php
-function __autoload($className) {
+/*function __autoload($className) {
     loadClass($className);
-}
+}*/
+spl_autoload_register('loadClass');
 function loadClass($className) {
     global $imports;
     if (isset($imports[$className])) {
