@@ -55,8 +55,8 @@ $LARGE_LOGO = "img/largelogo.jpg";
 /**********************************************************/
 $DB_HOST = "localhost";
 $DB_USER =  "root";
-$DB_PASS = "%Mobile!23";
-$DB_DATABASE = "mayipacs";
+$DB_PASS = "Florid@2025@";
+$DB_DATABASE = "bigskypacs";
 /**********************************************************
 /* EVENT CONFIGURATION                                    *
 /**********************************************************/

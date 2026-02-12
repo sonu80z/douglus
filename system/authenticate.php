@@ -26,10 +26,13 @@ if (!isset($var["action"]))
 if($var["action"] == "login")
 {
 	$controller = new DataController($DB_DATABASE);
+	//echo (new User($var))->GetTableName();
 	$result = $controller->Find(new User($var));
+	//print_r($result); exit;
 	if($result->recordCount > 0){
             $user = $result->toObject("User");
-            $user = $user[0];
+			$user = $user[0];
+			
             $_SESSION['AUTH_USER'] = serialize($user);
             $return["success"] = "true";
             $_logEvent = array();
@@ -131,4 +134,3 @@ if((isset($_SESSION['AUTH_USER'])) && $_SESSION['AUTH_USER'])
 session_commit();
 //die('==========');
 print JSON::Encode($return);
-?>
