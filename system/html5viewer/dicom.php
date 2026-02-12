@@ -6,7 +6,9 @@
 //
 // CopyRight (c) 2003-2008 RainbowFish Software
 //
-session_cache_limiter('private');
+if(PHP_SESSION_ACTIVE!=session_status()){
+	session_cache_limiter('private');
+}
 include_once($_SERVER["DOCUMENT_ROOT"]."/system/import.php");
 include_once($_SERVER["DOCUMENT_ROOT"]."/system/config.php");
 
@@ -30,6 +32,17 @@ $BASIC_PRINT = '1.2.840.10008.5.1.1.9';
 $MAX_PDU_LEN = 16 * 1024;
 // un-defined length
 $UNDEF_LEN = -1;
+
+class CNameType  {
+	var $name;
+	var $type;
+	use BaseObjectTrait;
+    function _constructor($name, $type) {
+		$this->name = $name;
+		$this->type = $type;
+	}
+    function _destructor() { }
+}
 
 // attribute tag to (name, type) table
 $ATTR_TBL = array(
@@ -469,7 +482,7 @@ function pacsone_dump(&$data) {
 	for ($i = 0; $i < $length; $i++) {
 		if ($i % 16 == 0)
 			print "<tr>";
-		print "<td>" . dechex(ord($data{$i})) . "</td>";
+		print "<td>" . dechex(ord($data[$i])) . "</td>";
 		if ($i % 16 == 15)
 			print "</tr>";
 	}
@@ -480,11 +493,11 @@ function pacsone_dump(&$data) {
 
 class BaseObject {
 
-    function BaseObject() {
+    /*function BaseObject() {
         $args = func_get_args();
         register_shutdown_function( array( &$this, '_destructor' ) );
         call_user_func_array( array( &$this, '_constructor' ), $args );
-    }
+    }*/
     function _constructor() { }
     function _destructor() { }
 	function getAttributeName($attr) {
@@ -493,22 +506,20 @@ class BaseObject {
 	}
 }
 
-class CNameType extends BaseObject {
-	var $name;
-	var $type;
-
-    function _constructor($name, $type) {
-		$this->name = $name;
-		$this->type = $type;
+trait BaseObjectTrait{
+	function getAttributeName($attr) {
+		global $ATTR_TBL;
+		return $ATTR_TBL[$attr]->name;
 	}
-    function _destructor() { }
 }
 
-class ApplicationContext extends BaseObject {
+
+
+class ApplicationContext  {
     var $data;
     // constant definitions
     var $CONTEXT = '1.2.840.10008.3.1.1.1';
-
+    use BaseObjectTrait;
     function _constructor() {
         $this->data = pack('a' . strlen($this->CONTEXT), $this->CONTEXT);
     }
@@ -519,10 +530,10 @@ class ApplicationContext extends BaseObject {
     }
 }
 
-class AbstractSyntax extends BaseObject {
+class AbstractSyntax  {
     var $uid;
     var $data;
-
+    use BaseObjectTrait;
     function _constructor($uid) {
         $this->uid = $uid;
         $this->data = pack('a' . strlen($this->uid), $this->uid);
@@ -534,11 +545,11 @@ class AbstractSyntax extends BaseObject {
     }
 }
 
-class TransferSyntax extends BaseObject {
+class TransferSyntax  {
     var $data;
     // constant definitions
     var $SYNTAX = '1.2.840.10008.1.2';
-
+    use BaseObjectTrait;
     function _constructor() {
         $this->data = pack('a' . strlen($this->SYNTAX), $this->SYNTAX);
     }
@@ -549,11 +560,11 @@ class TransferSyntax extends BaseObject {
     }
 }
 
-class PresentationContext extends BaseObject {
+class PresentationContext  {
     var $ctxId;
     var $abstract;
     var $data;
-
+    use BaseObjectTrait;
     function _constructor($abs) {
         global $sequence;
         // presentation context ID
@@ -577,10 +588,10 @@ class PresentationContext extends BaseObject {
     }
 }
 
-class MaximumPduLength extends BaseObject {
+class MaximumPduLength  {
     var $maxPduLen;
     var $data;
-
+    use BaseObjectTrait;
     function _constructor() {
         global $MAX_PDU_LEN;
         $this->maxPduLen = $MAX_PDU_LEN;
@@ -593,11 +604,11 @@ class MaximumPduLength extends BaseObject {
     }
 }
 
-class ImpClassUid extends BaseObject {
+class ImpClassUid  {
     var $data;
 	// constant definitions
 	var $PACSONE_UID = '1.2.826.0.1.3680043.2.737';
-
+	use BaseObjectTrait;
     function _constructor() {
         $this->data = pack('a' . strlen($this->PACSONE_UID), $this->PACSONE_UID);
     }
@@ -608,9 +619,9 @@ class ImpClassUid extends BaseObject {
     }
 }
 
-class UserInformation extends BaseObject {
+class UserInformation  {
     var $data;
-
+    use BaseObjectTrait;
     function _constructor() {
         $maxLen = new MaximumPduLength();
         $this->data = $maxLen->getDataBuffer();
@@ -624,13 +635,13 @@ class UserInformation extends BaseObject {
     }
 }
 
-class AssociateRequestPdu extends BaseObject {
+class AssociateRequestPdu  {
     var $calledAe;
     var $callingAe;
     var $abstract = array();
     var $accepted = array();
     var $data;
-
+    use BaseObjectTrait;
     function _constructor($sopClass, $called, $calling) {
         $this->calledAe = $called;
         $this->callingAe = $calling;
@@ -681,9 +692,9 @@ class AssociateRequestPdu extends BaseObject {
 		#pacsone_dump($present);
         // check the Presentation Context item
         do {
-            $itemType = ord($present{0});
-            $ctxId = ord($present{4});
-            $reason = ord($present{6});
+            $itemType = ord($present[0]);
+            $ctxId = ord($present[4]);
+            $reason = ord($present[6]);
             if ( ($itemType == 0x21) && in_array($ctxId, $this->abstract) &&
                  ($reason == 0) ) {
                 // use the first accepted presentation context
@@ -703,10 +714,10 @@ class AssociateRequestPdu extends BaseObject {
     }
 }
 
-class CEchoPdv extends BaseObject {
+class CEchoPdv  {
     var $msgId;
     var $data;
-
+    use BaseObjectTrait;
     function _constructor() {
         global $C_ECHO;
         global $sequence;
@@ -784,9 +795,9 @@ class CEchoPdv extends BaseObject {
     }
 }
 
-class CMatchResult extends BaseObject {
+class CMatchResult  {
 	var $attrs = array();
-
+	use BaseObjectTrait;
     function _constructor($data) {
         global $ATTR_TBL;
         $total = strlen($data);
@@ -800,7 +811,7 @@ class CMatchResult extends BaseObject {
             if (isset($ATTR_TBL[$key])) {
                 $body = substr($data, strlen($header), $length);
                 $format = $ATTR_TBL[$key]->type;
-                if (strcasecmp($format{0}, "A") == 0)
+                if (strcasecmp($format[0], "A") == 0)
                     $format .= $length;
                 $format .= 'value';
                 $array = unpack($format, $body);
@@ -835,9 +846,9 @@ class CMatchResult extends BaseObject {
 	}
 }
 
-class CFailedSopInstances extends BaseObject {
+class CFailedSopInstances  {
 	var $list = array();
-
+	use BaseObjectTrait;
     function _constructor($data) {
         $header = substr($data, 0, 8);
         $array = unpack('vgroup/velement/Vlength', $header);
@@ -851,11 +862,11 @@ class CFailedSopInstances extends BaseObject {
     function _destructor() { }
 }
 
-class Sequence extends BaseObject {
+class Sequence  {
 	var $items = array();
 	var $tag;
 	var $length;
-
+	use BaseObjectTrait;
     function _constructor($key, $total, &$data, $explicit = false) {
         global $UNDEF_LEN;
         $count = 0;
@@ -933,10 +944,10 @@ class Sequence extends BaseObject {
 	}
 }
 
-class Item extends BaseObject {
+class Item  {
 	var $attrs = array();
 	var $length;
-
+	use BaseObjectTrait;
     function _constructor(&$data, $total, $explicit = false) {
 		global $ATTR_TBL;
 		global $EXPLICIT_VR_TBL;
@@ -988,13 +999,13 @@ class Item extends BaseObject {
 				//print "Key = " . dechex($key) . " Length = $length Format = $format<br>";
 				$body = substr($data, strlen($header));
 				if ( ($length == $UNDEF_LEN) ||
-                     (strcasecmp($format{0}, "S") == 0) ) {		// sequence
+                     (strcasecmp($format[0], "S") == 0) ) {		// sequence
 					if ($length == $UNDEF_LEN)
 						$length = strlen($body);
 					$this->attrs[$key] = new Sequence($key, $length, $body, $explicit);
 					$length = $this->attrs[$key]->getLength();
 				} else {
-					if (strcasecmp($format{0}, "A") == 0)
+					if (strcasecmp($format[0], "A") == 0)
 						$format .= $length;
 					$format .= 'value';
 					$array = unpack($format, $body);
@@ -1052,9 +1063,9 @@ class Item extends BaseObject {
 	}
 }
 
-class CAttributeList extends BaseObject {
+class CAttributeList  {
 	var $attrs = array();
-
+	use BaseObjectTrait;
     function _constructor($data) {
 		global $ATTR_TBL;
         $total = strlen($data);
@@ -1067,7 +1078,7 @@ class CAttributeList extends BaseObject {
             $length = $array['length'];
 			$body = substr($data, strlen($header), $length);
 			$format = $ATTR_TBL[$key]->type;
-			if (strcasecmp($format{0}, "A") == 0)
+			if (strcasecmp($format[0], "A") == 0)
 				$format .= $length;
 			$format .= 'value';
 			$array = unpack($format, $body);
@@ -1083,7 +1094,7 @@ class CAttributeList extends BaseObject {
     function _destructor() { }
 }
 
-class CFindPdv extends BaseObject {
+class CFindPdv  {
     var $finalStatus;
     var $msgId;
     var $data;
@@ -1093,7 +1104,7 @@ class CFindPdv extends BaseObject {
 		0xA900 => "Failed: Identifier does not match SOP class",
 		0xFE00 => "Cancel: Matching terminated due to Cancel request",
 	);
-
+	use BaseObjectTrait;
     function _constructor($sopClass) {
         global $sequence;
         // write Affected SOP Class UID
@@ -1122,7 +1133,7 @@ class CFindPdv extends BaseObject {
     }
     function recvResponse(&$data, &$complete, &$error) {
 		// check PDV header to see if it's a Command or Dataset
-		$msgHdr = ord($data{5});
+		$msgHdr = ord($data[5]);
         // skip to Group Length
         $data = substr($data, 6);
 		if ($msgHdr & 0x1) {
@@ -1225,10 +1236,11 @@ class CFindPdv extends BaseObject {
 	}
 }
 
-class WorklistFindPdv extends BaseObject {
+class WorklistFindPdv  {
     var $finalStatus;
     var $msgId;
     var $data;
+    use BaseObjectTrait;
 	// Modality Worklist-FIND response status table
 	var $STATUS_TBL = array (
 		0xA700 => "Refused: Out of Resources",
@@ -1265,7 +1277,7 @@ class WorklistFindPdv extends BaseObject {
     }
     function recvResponse(&$data, &$complete, &$error) {
 		// check PDV header to see if it's a Command or Dataset
-		$msgHdr = ord($data{5});
+		$msgHdr = ord($data[5]);
         // skip to Group Length
         $data = substr($data, 6);
 		if ($msgHdr & 0x1) {
@@ -1350,10 +1362,10 @@ class WorklistFindPdv extends BaseObject {
 	}
 }
 
-class GetPrinterPdv extends BaseObject {
+class GetPrinterPdv  {
     var $msgId;
     var $data;
-
+    use BaseObjectTrait;
     function _constructor() {
         global $sequence;
         // write Affected SOP Class UID
@@ -1386,7 +1398,7 @@ class GetPrinterPdv extends BaseObject {
     }
     function recvResponse(&$data, &$complete, &$error) {
 		// check PDV header to see if it's a Command or Dataset
-		$msgHdr = ord($data{5});
+		$msgHdr = ord($data[5]);
         // skip to Group Length
         $data = substr($data, 6);
 		if ($msgHdr & 0x1) {
@@ -1475,7 +1487,7 @@ class GetPrinterPdv extends BaseObject {
 	}
 }
 
-class CMovePdv extends BaseObject {
+class CMovePdv  {
     var $msgId;
     var $finalStatus;
     var $numRemaining;
@@ -1492,7 +1504,7 @@ class CMovePdv extends BaseObject {
 		0xFE00 => "Cancel: Sub-operations terminated due to Cancel indication",
 		0xB000 => "Warning: Sub-operations Complete - One or more failures",
 	);
-
+	use BaseObjectTrait;
     function _constructor($sopClass, $dest) {
         global $sequence;
         // write Affected SOP Class UID
@@ -1530,7 +1542,7 @@ class CMovePdv extends BaseObject {
     }
     function recvResponse(&$data, &$complete, &$error) {
 		// check PDV header to see if it's a Command or Dataset
-		$msgHdr = ord($data{5});
+		$msgHdr = ord($data[5]);
         // skip to Group Length
         $data = substr($data, 6);
 		if ($msgHdr & 0x1) {
@@ -1649,13 +1661,13 @@ class CMovePdv extends BaseObject {
 	}
 }
 
-class CFindIdentifierRoot extends BaseObject {
+class CFindIdentifierRoot  {
     var $attrs = array();
     var $data;
     var $id;
     var $last;
     var $first;
-
+    use BaseObjectTrait;
     function _constructor($id, $last, $first) {
         $this->id = $id;
         $this->last = $last;
@@ -1748,10 +1760,10 @@ class CFindIdentifierRoot extends BaseObject {
     }
 }
 
-class CFindIdentifierPatient extends BaseObject {
+class CFindIdentifierPatient  {
     var $attrs = array();
     var $data;
-
+    use BaseObjectTrait;
     function _constructor($patientid, $studyid, $date, $accession, $referdoc) {
 		// add Study Date
 		$length = strlen($date);
@@ -1816,10 +1828,10 @@ class CFindIdentifierPatient extends BaseObject {
     }
 }
 
-class CFindIdentifierStudyRoot extends BaseObject {
+class CFindIdentifierStudyRoot  {
     var $attrs = array();
     var $data;
-
+    use BaseObjectTrait;
     function _constructor($studyid, $date, $accession, $referdoc) {
 		// add Study Date
 		$length = strlen($date);
@@ -1882,10 +1894,10 @@ class CFindIdentifierStudyRoot extends BaseObject {
     }
 }
 
-class CFindIdentifierStudy extends BaseObject {
+class CFindIdentifierStudy  {
     var $attrs = array();
     var $data;
-
+    use BaseObjectTrait;
     function _constructor($patientid, $uid, $modality, $date) {
 		// add Series Date
 		$length = strlen($date);
@@ -1954,10 +1966,10 @@ class CFindIdentifierStudy extends BaseObject {
 	}
 }
 
-class CFindIdentifierSeries extends BaseObject {
+class CFindIdentifierSeries  {
     var $attrs = array();
     var $data;
-
+    use BaseObjectTrait;
     function _constructor($patientid, $studyuid, $uid) {
 		// add SOP Instance UID
         $this->data = pack('v2V', 0x8, 0x18, 0);
@@ -2010,10 +2022,10 @@ class CFindIdentifierSeries extends BaseObject {
 	}
 }
 
-class CFindIdentifierImage extends BaseObject {
+class CFindIdentifierImage  {
     var $attrs = array();
     var $data;
-
+    use BaseObjectTrait;
     function _constructor($patientid, $studyuid, $seriesuid, $uid) {
 		// add SOP Instance UID
         $length = strlen($uid);
@@ -2084,10 +2096,10 @@ class CFindIdentifierImage extends BaseObject {
 	}
 }
 
-class CMoveIdentifierPatient extends BaseObject {
+class CMoveIdentifierPatient  {
     var $attrs = array();
     var $data;
-
+    use BaseObjectTrait;
     function _constructor($patientid) {
         // add Query/Retrieve Level
         $level = 'PATIENT';
@@ -2109,10 +2121,10 @@ class CMoveIdentifierPatient extends BaseObject {
     }
 }
 
-class CMoveIdentifierStudy extends BaseObject {
+class CMoveIdentifierStudy  {
     var $attrs = array();
     var $data;
-
+    use BaseObjectTrait;
     function _constructor($patientid, $uid) {
         // add Query/Retrieve Level
         $level = 'STUDY';
@@ -2140,10 +2152,10 @@ class CMoveIdentifierStudy extends BaseObject {
     }
 }
 
-class CMoveIdentifierSeries extends BaseObject {
+class CMoveIdentifierSeries  {
     var $attrs = array();
     var $data;
-
+    use BaseObjectTrait;
     function _constructor($patientid, $studyuid, $uid) {
         // add Query/Retrieve Level
         $level = 'SERIES';
@@ -2177,10 +2189,10 @@ class CMoveIdentifierSeries extends BaseObject {
     }
 }
 
-class CMoveIdentifierImage extends BaseObject {
+class CMoveIdentifierImage  {
     var $attrs = array();
     var $data;
-
+    use BaseObjectTrait;
     function _constructor($patientid, $studyuid, $seriesuid, $uid) {
 		// add SOP Instance UID
         $length = strlen($uid);
@@ -2220,10 +2232,10 @@ class CMoveIdentifierImage extends BaseObject {
     }
 }
 
-class WorklistFindIdentifier extends BaseObject {
+class WorklistFindIdentifier  {
     var $attrs = array();
     var $data;
-
+    use BaseObjectTrait;
     function _constructor($patientid,
 	                      $patientname,
 						  $station,
@@ -2353,11 +2365,11 @@ class WorklistFindIdentifier extends BaseObject {
     }
 }
 
-class ProtocolDataTfPdu extends BaseObject {
+class ProtocolDataTfPdu  {
     var $ctxId;
     var $pdv;
     var $data;
-
+    use BaseObjectTrait;
     function _constructor($ctxId) {
         $this->ctxId = $ctxId;
     }
@@ -2417,9 +2429,9 @@ class ProtocolDataTfPdu extends BaseObject {
     }
 }
 
-class AssociateReleasePdu extends BaseObject {
+class AssociateReleasePdu  {
     var $data;
-
+    use BaseObjectTrait;
     function _constructor() {
         $this->data = pack('N', 0);
     }
@@ -2430,7 +2442,7 @@ class AssociateReleasePdu extends BaseObject {
     }
 }
 
-class Association extends BaseObject {
+class Association  {
     var $socket;
     var $ipAddr;
     var $hostName;
@@ -2441,7 +2453,7 @@ class Association extends BaseObject {
 	var $connected = false;
     // constant definitions
     var $TIMEOUT = 5;
-
+    use BaseObjectTrait;
     function _constructor($ip, $host, $port, $called, $calling) {
         $address = (strlen($ip))? $ip : $host;
         $errno = 0;
@@ -2473,7 +2485,7 @@ class Association extends BaseObject {
         $data = fread($this->socket, 6);
 		#pacsone_dump($data);
         // check the PDU type
-        if ($data && ord($data{0}) == 0x2) {
+        if ($data && ord($data[0]) == 0x2) {
             $array = unpack('Ctype/Cdummy/Nlength', $data);
 			$pduLen = $array['length'];
         	$data = fread($this->socket, $pduLen);
@@ -2498,7 +2510,7 @@ class Association extends BaseObject {
 		    fwrite($this->socket, $data, strlen($data));
 			// check received ASSOCIATE_RELEASE_RP PDU
    		    $data = fread($this->socket, 10);
-			$pduType = ord($data{0});
+			$pduType = ord($data[0]);
             /*
    	     	if ($pduType != 0x6)
            		$error .= "Invalid ASSOCIATE_RELEASE_RSP PDU received: pduType = " . $pduType;
@@ -2523,7 +2535,7 @@ class Association extends BaseObject {
         // check the PDU type
 		$respComplete = false;
 		do {
-        	if ($data && ord($data{0}) == 0x4) {
+        	if ($data && ord($data[0]) == 0x4) {
             	$array = unpack('Ctype/Cdummy/Nlength', $data);
 		    	$pduLen = $array['length'];
             	$data = fread($this->socket, $pduLen);
@@ -2566,7 +2578,7 @@ class Association extends BaseObject {
         do {
             $data = fread($this->socket, 6);
             // check the PDU type
-            if ($data && ord($data{0}) == 0x4) {
+            if ($data && ord($data[0]) == 0x4) {
                 $array = unpack('Ctype/Cdummy/Nlength', $data);
 		        $pduLen = $array['length'];
                 $data = fread($this->socket, $pduLen);
@@ -2608,7 +2620,7 @@ class Association extends BaseObject {
         do {
             $data = fread($this->socket, 6);
             // check the PDU type
-            if ($data && ord($data{0}) == 0x4) {
+            if ($data && ord($data[0]) == 0x4) {
                 $array = unpack('Ctype/Cdummy/Nlength', $data);
 		        $pduLen = $array['length'];
                 $data = fread($this->socket, $pduLen);
@@ -2648,7 +2660,7 @@ class Association extends BaseObject {
         do {
             $data = fread($this->socket, 6);
             // check the PDU type
-            if ($data && ord($data{0}) == 0x4) {
+            if ($data && ord($data[0]) == 0x4) {
                 $array = unpack('Ctype/Cdummy/Nlength', $data);
 		        $pduLen = $array['length'];
                 $data = fread($this->socket, $pduLen);
@@ -2682,7 +2694,7 @@ class Association extends BaseObject {
         do {
             $data = fread($this->socket, 6);
             // check the PDU type
-            if ($data && ord($data{0}) == 0x4) {
+            if ($data && ord($data[0]) == 0x4) {
                 $array = unpack('Ctype/Cdummy/Nlength', $data);
 		        $pduLen = $array['length'];
                 $data = fread($this->socket, $pduLen);
@@ -2700,12 +2712,12 @@ class Association extends BaseObject {
     }
 }
 
-class StructuredReport extends BaseObject {
+class StructuredReport  {
     var $attrs = array();
     var $root;
     var $explicit = false;
     var $bigEnd = false;
-
+    use BaseObjectTrait;
     function _constructor($path) {
 		global $ATTR_TBL;
 		global $EXPLICIT_VR_TBL;
@@ -2796,7 +2808,7 @@ class StructuredReport extends BaseObject {
 					$format = $ATTR_TBL[$key]->type;
 				else
 					$format = "A";
-				if (strcasecmp($format{0}, "A") == 0)
+				if (strcasecmp($format[0], "A") == 0)
 					$format .= $length;
 				$format .= 'value';
 				$array = unpack($format, $body);
@@ -2837,7 +2849,7 @@ class StructuredReport extends BaseObject {
 	}
 }
 
-class ContentItem extends BaseObject {
+class ContentItem  {
 	var $type;
 	var $conceptNameCode;
 	var $value;
@@ -2851,8 +2863,8 @@ class ContentItem extends BaseObject {
 	var $acqContexts = array();
 	var $inferred = array();
 	var $selected = array();
-
-    function _constructor(&$concept) {
+	use BaseObjectTrait;
+    function _constructor(&$concept,&$b=null) {
 		if (isset($concept) && $concept->hasKey(0x00080104))
 			$this->conceptNameCode = $concept->getAttr(0x00080104);
 		else
@@ -3006,7 +3018,7 @@ class ContentItem extends BaseObject {
 class ContainerItem extends ContentItem {
 	var $continuity;
 
-    function _constructor(&$concept, &$continuity) {
+    function _constructor(&$concept, &$continuity=null) {
 		ContentItem::_constructor($concept);
 		$this->type = "Container";
 		$this->continuity = $continuity;
@@ -3018,7 +3030,7 @@ class ContainerItem extends ContentItem {
 }
 
 class TextValueItem extends ContentItem {
-    function _constructor(&$concept, &$value) {
+    function _constructor(&$concept, &$value=null) {
 		ContentItem::_constructor($concept);
 		$this->type = "TextValue";
 		$this->value = $value;
@@ -3027,7 +3039,7 @@ class TextValueItem extends ContentItem {
 }
 
 class DateTimeItem extends ContentItem {
-    function _constructor(&$concept, &$value) {
+    function _constructor(&$concept, &$value=null) {
 		ContentItem::_constructor($concept);
 		$this->type = "DateTime";
 		$this->value = $value;
@@ -3036,7 +3048,7 @@ class DateTimeItem extends ContentItem {
 }
 
 class DateItem extends ContentItem {
-    function _constructor(&$concept, &$value) {
+    function _constructor(&$concept, &$value=null) {
 		ContentItem::_constructor($concept);
 		$this->type = "Date";
 		$this->value = $value;
@@ -3045,7 +3057,7 @@ class DateItem extends ContentItem {
 }
 
 class TimeItem extends ContentItem {
-    function _constructor(&$concept, &$value) {
+    function _constructor(&$concept, &$value=null) {
 		ContentItem::_constructor($concept);
 		$this->type = "Time";
 		$this->value = $value;
@@ -3054,7 +3066,7 @@ class TimeItem extends ContentItem {
 }
 
 class PersonNameItem extends ContentItem {
-    function _constructor(&$concept, &$value) {
+    function _constructor(&$concept, &$value=null) {
 		ContentItem::_constructor($concept);
 		$this->type = "PersonName";
 		$this->value = $value;
@@ -3063,7 +3075,7 @@ class PersonNameItem extends ContentItem {
 }
 
 class UidItem extends ContentItem {
-    function _constructor(&$concept, &$value) {
+    function _constructor(&$concept, &$value=null) {
 		ContentItem::_constructor($concept, $value);
 		$this->type = "Uid";
 		$this->value = $value;
@@ -3072,7 +3084,7 @@ class UidItem extends ContentItem {
 }
 
 class NumericItem extends ContentItem {
-    function _constructor(&$concept, &$value) {
+    function _constructor(&$concept, &$value=null) {
 		ContentItem::_constructor($concept, $value);
 		$this->type = "Numeric";
 		$this->value = $value;
@@ -3089,7 +3101,7 @@ class NumericItem extends ContentItem {
 }
 
 class CodeItem extends ContentItem {
-    function _constructor(&$concept, &$value) {
+    function _constructor(&$concept, &$value=null) {
 		ContentItem::_constructor($concept, $value);
 		$this->type = "Code";
 		$this->value = $value;
@@ -3103,7 +3115,7 @@ class CodeItem extends ContentItem {
 }
 
 class CompositeItem extends ContentItem {
-    function _constructor(&$concept, &$value) {
+    function _constructor(&$concept, &$value=null) {
 		ContentItem::_constructor($concept, $value);
 		$this->type = "Composite";
 		$this->value = $value;
@@ -3124,7 +3136,7 @@ class CompositeItem extends ContentItem {
 }
 
 class ImageItem extends ContentItem {
-    function _constructor(&$concept, &$value) {
+    function _constructor(&$concept, &$value=null) {
 		ContentItem::_constructor($concept, $value);
 		$this->type = "Image";
 		$this->value = $value;
@@ -3160,7 +3172,7 @@ class ImageItem extends ContentItem {
 }
 
 class WaveformItem extends ContentItem {
-    function _constructor(&$concept, &$value) {
+    function _constructor(&$concept, &$value=null) {
 		ContentItem::_constructor($concept, $value);
 		$this->type = "Waveform";
 		$this->value = $value;
@@ -3185,14 +3197,14 @@ class WaveformItem extends ContentItem {
 	}
 }
 
-class RawTags extends BaseObject {
+class RawTags  {
     var $attrs = array();
     var $explicit = false;
     var $bigEnd = false;
     var $handle;
     var $fileSize;
     var $syntax;
-
+    use BaseObjectTrait;
     function _constructor($path) {
         global $XFER_SYNTAX_TBL;
         global $EXPLICIT_VR_TBL;
@@ -3303,11 +3315,11 @@ class RawTags extends BaseObject {
                 $format = ($element == 0)? "V" : "A";
             //print "Key = " . dechex($key) . " Length = $length Format = $format<br>";
             if ( ($length == $UNDEF_LEN) ||
-                 (strcasecmp($format{0}, "S") == 0) ) {     // sequence elements
+                 (strcasecmp($format[0], "S") == 0) ) {     // sequence elements
                 $this->attrs[$key] = new Sequence($key, strlen($body), $body);
                 $length = $this->attrs[$key]->getLength();
             } else {
-                if (strcasecmp($format{0}, "A") == 0)
+                if (strcasecmp($format[0], "A") == 0)
                     $format .= $length;
                 $format .= 'value';
                 $array = unpack($format, $body);
@@ -3374,13 +3386,13 @@ class RawTags extends BaseObject {
                 $format = ($element == 0)? "V" : "A";
             //print "Key = " . dechex($key) . " Length = $length Format = $format<br>";
             if ( ($length == $UNDEF_LEN) ||
-                 (strcasecmp($format{0}, "S") == 0) ) {     // sequence elements
+                 (strcasecmp($format[0], "S") == 0) ) {     // sequence elements
                 if ($length == $UNDEF_LEN)
                     $length = strlen($body);
                 $this->attrs[$key] = new Sequence($key, $length, $body, $this->explicit);
                 $length = $this->attrs[$key]->getLength();
             } else {
-                if (strcasecmp($format{0}, "A") == 0)
+                if (strcasecmp($format[0], "A") == 0)
                     $format .= $length;
                 $format .= 'value';
                 @$array = unpack($format, $body);
@@ -3426,7 +3438,7 @@ class RawTags extends BaseObject {
                 $value = "Sequence";
             else {
                 $value = trim($attr);
-                if ($format{0} == 'A')
+                if ($format[0] == 'A')
                     $value = str_replace("^", " ", $value);
             }
             print "<tr><td>$key</td>";
@@ -3461,7 +3473,7 @@ class RawTags extends BaseObject {
                 $value = "Sequence";
             else {
                 $value = trim($attr);
-                if ($format{0} == 'A')
+                if ($format[0] == 'A')
                     $value = str_replace("^", " ", $value);
             }
             $value = trim($value);
@@ -3487,7 +3499,7 @@ class RawTags extends BaseObject {
                 $value = "Sequence";
             else {
                 $value = trim($attr);
-                if ($format{0} == 'A')
+                if ($format[0] == 'A')
                     $value = str_replace("^", " ", $value);
             }
             $value = trim($value);
@@ -3514,7 +3526,7 @@ class RawTags extends BaseObject {
                 $value = "Sequence";
             else {
                 $value = trim($attr);
-                if ($format{0} == 'A')
+                if ($format[0] == 'A')
                     $value = str_replace("^", " ", $value);
             }
             $value = trim($value);

@@ -5,7 +5,9 @@ $studyReportPath = $TRANSCRIPTION_DIRECTORY . "/" . $studyReport;
 $studyReportURL = $TRANSCRIPTION_VIRTUAL_DIRECTORY . "/" . $studyReport;
 $studyReportExists = file_exists($studyReportPath);
 
-session_start();
+if(PHP_SESSION_ACTIVE!=session_status()){
+	session_start();
+}
 
 
 ?>
