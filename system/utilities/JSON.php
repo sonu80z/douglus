@@ -12,7 +12,7 @@ class JSON {
                 $val = "'" . addslashes($val) . "'";
             array_push($json, strtolower($col) . ":" . $val . "");
         }
-        return "{" . join($json, ",") . "}";
+        return "{" . join(",",$json) . "}";
     }
 
 }
