@@ -38,20 +38,20 @@ class API extends RestService {
 			$patient = $controller->Find(new Patient(array("origid"=>$study[0]->patientid)))->toObject("Patient");
 			if(sizeof($patient) > 0 ){
 				$return = $patient[0];
-				$return->studies = $study;
+				@$return->studies = $study;
 				$seriesParam = new QueryParams();
 				$seriesParam->conditions = "modality <> 'SR'"; 
 				$series = $controller->Find(new Series(array("studyuid"=>$studyID)), $seriesParam)->toObject("Series");
-				$return->studies[0]->series = $series;
+				@$return->studies[0]->series = $series;
 				$seriesLength = count($series); 
 				for($i = 0; $i < $seriesLength; $i++){
 					$images = $controller->Find(new Image(array("seriesuid"=>$series[$i]->uuid)))->toObject("ImageInfo");
 					
 					for($j = 0; $j < sizeof($images); $j++){
 						$tags = new RawTags($images[$j]->path);
-						$images[$j]->info = $tags->returnObject();
+						@$images[$j]->info = $tags->returnObject();
 					}
-					$return->studies[0]->series[$i]->images = $images;
+					@$return->studies[0]->series[$i]->images = $images;
 				}
 				
 			}
