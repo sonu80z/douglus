@@ -26,7 +26,7 @@ if (!isset($_SESSION))
 {
 session_start();
 }
-$u = @unserialize($_SESSION['AUTH_USER']);
+$u = unserialize($_SESSION['AUTH_USER']);
 if (!$u)
     $user_id = 1;
 else $user_id = $u->id;

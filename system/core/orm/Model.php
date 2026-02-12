@@ -25,7 +25,7 @@ class Model
 		if(is_array($properties) && sizeof($properties) > 0){
 			foreach($properties as $key => $value){
         $key = strtolower($key);
-				if(array_key_exists($key, $this))
+				if(property_exists($this, $key))
 					$this->{$key} = $value;
 			}	
 		}

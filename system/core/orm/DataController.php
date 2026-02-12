@@ -17,8 +17,8 @@ class DataController {
 	}
 	public function Add($model){
 		$cols = $this->GetColumns($model, true, true);
-		$sql = "INSERT INTO " . $model->GetTableName() . " (" . join(array_keys($cols), ",") . ") ".
-		"VALUES (" . join(array_values($cols), ","). ")";
+		$sql = "INSERT INTO " . $model->GetTableName() . " (" . join(",",array_keys($cols) ) . ") ".
+		"VALUES (" . join( ",",array_values($cols)). ")";
 		return $this->db->ExecuteNonQuery($sql);
 	}
 	public function Update($model){
@@ -27,8 +27,8 @@ class DataController {
 		if(count($keys) > 0){
 			$cols = $this->GetColumnValuePair($model);
 			$sql = "UPDATE " . $model->GetTableName() . 
-			" SET " . join($cols, " , ").
-			" WHERE " . join($keys, " AND ");
+			" SET " . join(" , ",$cols).
+			" WHERE " . join(" AND ",$keys);
 //		echo ('<pre>'.print_r($sql, 1).'</pre>');
 		}else throw new Exception("Failed to update no primary key was set");
 		return $this->db->ExecuteNonQuery($sql);
@@ -36,7 +36,7 @@ class DataController {
 	public function Delete($model){
 		$keys = $this->GetColumnValuePair($model, true, true);
 		if(count($keys) > 0)
-			$sql = "DELETE FROM " . $model->GetTableName() . " WHERE ". join($keys, " AND ");
+			$sql = "DELETE FROM " . $model->GetTableName() . " WHERE ". join(" AND ",$keys);
 		else 
 			throw new Exception("Failed to delete need a condition for deleting.");
 		return $this->db->ExecuteNonQuery($sql);
@@ -49,7 +49,7 @@ class DataController {
 		$sql = "SELECT * FROM " . $tablename. " WHERE 1 = 1 " ;
 		if(count($keys) > 0)
         {    
-            $sql .= " AND " . join($keys, " AND ");
+            $sql .= " AND " . join( " AND ", $keys);
         }
         if($params->conditions != "")
         {

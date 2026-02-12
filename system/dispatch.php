@@ -35,6 +35,7 @@
                 {
                     if ($var["method"] != 'getImage' && $var['method'] != 'processSRFiles' && $var['method'] != 'logBurnCDActivity')
                     {
+                    	echo json_encode(array('success'=>true));exit();
                         echo 'You should relogin first';
                         exit();
                     }

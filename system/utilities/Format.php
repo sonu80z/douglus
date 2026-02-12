@@ -5,6 +5,9 @@
  */
 class Format{
 	public static function Javascript($string){
+		if(is_null($string)){
+			return '';
+		}
 		return strtr($string, array('\\'=>'\\\\',"'"=>"\\'",'"'=>'\\"',"\r"=>'\\r',"\n"=>'\\n','</'=>'<\/'));
 	}
 	public static function MySQL($string){

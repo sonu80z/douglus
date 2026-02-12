@@ -105,7 +105,7 @@ class StudyControl extends Control
         $study->modalities = strtoupper(@$args['modality']);
         $study->studytime = strtoupper($args['studytime']);
         $study->description = strtoupper($args['description']);
-        $study->referringphysician = strtoupper(@$args['referringphysician']);
+        $study->referringphysician = @strtoupper(@$args['referringphysician']);
         $study->patientid = strtoupper(@$args['patientid']);
         $study->sourceae ='PRS';
         $study->updated = date('Y-m-d H:i:s');

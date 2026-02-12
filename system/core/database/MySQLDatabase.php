@@ -11,13 +11,15 @@
 import("system.core.database.interface.*");
 class MySQLDatabase implements IDatabase {
 	private $connection;
+	private static $conn;
 	private static $instance;
 	private static $host;
 	private static $user;
 	private static $pass;
 	private static $database;
 	private function __construct($database = null){
-		$this->connection = mysqli_connect(MySQLDatabase::$host, MySQLDatabase::$user, MySQLDatabase::$pass);
+		//echo $database;
+ 		MySQLDatabase::$conn=$this->connection = mysqli_connect(MySQLDatabase::$host, MySQLDatabase::$user, MySQLDatabase::$pass);
 		$this->SetDatabase($database);
 		$this->PrintErrorMessage();
 	}
@@ -36,6 +38,9 @@ class MySQLDatabase implements IDatabase {
 	public function getConnection(){
 		return $this->connection;
 	}
+	public static function getConnection2(){
+		return MySQLDatabase::$conn;
+	}
 	public function SetDatabase($database){
 		if(!isset($database) || $database == null) $database = MySQLDatabase::$database;
 		mysqli_select_db($this->connection, $database);
@@ -44,7 +49,7 @@ class MySQLDatabase implements IDatabase {
 		mysqli_close($this->connection);
 	}
 	public function ExecuteReader($sql){
-		//echo $sql;
+	//	echo $sql;
 		return new MySQLRecordReader($this->connection, mysqli_query($this->connection, $sql));
 	}
 	public function ExecuteNonQuery($sql){
@@ -88,10 +93,10 @@ class MySQLRecordReader implements IRecordReader{
 		$this->error = '';
                 $this->connection = $connection;
 		$this->resultset = $resultset;
-		if(isset($this->resultset) and $this->resultset != ""){
+		if($this->resultset){
 			$this->recordCount = mysqli_num_rows($this->resultset);
 		}else{
-			$this->recordCount = 0;
+			$this->recordCount = 0;//echo 'g';exit;
 		}
 	}
 	public function getResultSet(){
@@ -117,9 +122,9 @@ class MySQLRecordReader implements IRecordReader{
 			foreach($row as $col=>$val){
 				array_push($jsonRow, strtolower($col).":'".mysqli_real_escape_string($this->connection, $val)."'");	
 			}
-			array_push($json, "{".join($jsonRow, ",")."}");	
+			array_push($json, "{".join(',',$jsonRow)."}");	
 		}
-		$returnvalue = "[".join($json, ",")."]";
+		$returnvalue = "[".join(',',$json)."]";
 		if($showRecordCount) $returnvalue  = "{recordcount:".$this->recordCount.", data:".$returnvalue."}";
 		return $returnvalue;
 	}
