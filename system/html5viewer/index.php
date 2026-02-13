@@ -486,7 +486,7 @@ if(PHP_SESSION_ACTIVE!=session_status()){
 		<script src="/system/html5viewer/assets/js/jquery.knob.min.js"></script>
 		<!-- ace scripts -->
 		<script type="text/javascript" src="assets/js/ace.min.js"></script>
-		<script type="text/javascript" src="/system/html5viewer/api.php?method=getAjaxService"></script>
+		<script type="text/javascript" src="/system/html5viewer/api.php?method=getAjaxService&studyid=<?php echo $_GET['entry']; ?>"></script>
 		<!-- custom scripts -->
 		<script type="text/javascript" src="assets/js/jquery.cfx.js"></script>
 		<script type="text/javascript" src="assets/js/html5viewer.js"></script>

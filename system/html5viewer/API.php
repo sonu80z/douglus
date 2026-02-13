@@ -30,9 +30,9 @@ $controller = new DataController($DB_DATABASE);
 require_once "RestService.php";
 //all methods will be publically exposed via the url.
 class API extends RestService {
-	public function getStudyDetails($studyID){		
+	public function getStudyDetails($studyid ){		
 		global $controller;
-		$study = $controller->Find(new Study(array("uuid"=>$studyID)))->toObject("Study");
+		$study = $controller->Find(new Study(array("uuid"=>$studyid )))->toObject("Study");
 		$return = null;		
 		if(sizeof($study) > 0){
 			$patient = $controller->Find(new Patient(array("origid"=>$study[0]->patientid)))->toObject("Patient");
@@ -41,7 +41,7 @@ class API extends RestService {
 				@$return->studies = $study;
 				$seriesParam = new QueryParams();
 				$seriesParam->conditions = "modality <> 'SR'"; 
-				$series = $controller->Find(new Series(array("studyuid"=>$studyID)), $seriesParam)->toObject("Series");
+				$series = $controller->Find(new Series(array("studyuid"=>$studyid)), $seriesParam)->toObject("Series");
 				@$return->studies[0]->series = $series;
 				$seriesLength = count($series); 
 				for($i = 0; $i < $seriesLength; $i++){

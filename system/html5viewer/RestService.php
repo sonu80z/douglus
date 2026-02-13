@@ -38,9 +38,9 @@ class RestService {
                     $pArray[strtolower($key)] = $requestAttributes[strtolower($key)];
                 }
                 
-                if (count($pArray) == $paramCount && !in_array(null, $pArray)) {
-                    $studyid=$pArray['studyid'];
-                    $result = call_user_func_array(array($serviceClass, $method), [$studyid]);
+                if (count($pArray) == $paramCount && !in_array(null, $pArray)) {//echo  get_class($serviceClass),$method;
+                    //$studyid=$pArray['studyid'];
+                    $result = call_user_func_array(array($serviceClass, $method), $pArray);
                     
                     if ($result != null) {
                         if($method == "getAjaxService")
