@@ -773,7 +773,7 @@ if (($action == 'Mark Study Read') || ($action == 'Mark Study Un-Read'))
 			$worklist->status = $STUDY_STATUS_READ;
 		}		
 	    $controller->Update($study);
-		$controller->Update($worklist);
+		//$controller->Update($worklist);
 	}
 	ob_end_clean();
 	$return["success"]  = "true";
