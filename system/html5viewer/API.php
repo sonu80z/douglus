@@ -71,17 +71,17 @@ class API extends RestService {
 			if(sizeof($image) > 0){
 
 				$image = $image[0];
-				$output = $INSTALL_DIRECTORY."/system/html5viewer/"."dicom/".$image->uuid.".jpeg";
+				$output = $INSTALL_DIRECTORY."/system/html5viewer/"."dicom/".$image->uuid.".jpg";
 				$input = $image->path;
 				if(!file_exists($output)){
 					//first we try imagick
-					/*$img_obj=new Imagick;
-					$img_obj->readImage ($input);*/
-					$src = imagick_readimage($input);
-					//$img_obj->setImageFormat ("jpeg");
+					$img_obj=new Imagick;
+					$img_obj->readImage ($input);
+					//$src = imagick_readimage($input);
+					$img_obj->setImageFormat ("jpeg");
 					//$success=file_put_contents ($output, $img_obj);
-					//$success=$img_obj->writeImages($output);
-					if(!imagick_iserror($src)){
+					$success=$img_obj->writeImages($output,true);
+					/*if(!imagick_iserror($src)){
 						imagick_writeimage($src, $output);
 					}else{
 						//there was a problem with imagick.. let's try the other converter.
@@ -95,9 +95,9 @@ class API extends RestService {
 							}
 						}catch(Exception $e){
 						}
-					}
-					imagick_destroyhandle($src);
-					/*$img_obj->destroy ();*/
+					}*/
+					//imagick_destroyhandle($src);
+					$img_obj->destroy ();
 				}
 			}
 
