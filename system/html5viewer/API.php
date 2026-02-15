@@ -73,6 +73,10 @@ class API extends RestService {
 				$image = $image[0];
 				$output = $INSTALL_DIRECTORY."/system/html5viewer/"."dicom/".$image->uuid.".jpg";
 				$input = $image->path;
+				if(!file_exists($input)){
+					echo json_encode(array("success"=>false,'msg'=>'Dicom not found'));
+					exit;
+				}
 				if(!file_exists($output)){
 					//first we try imagick
 					$img_obj=new Imagick;
