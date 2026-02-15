@@ -98,6 +98,8 @@ class API extends RestService {
 					}*/
 					//imagick_destroyhandle($src);
 					$img_obj->destroy ();
+				}else{
+					$success=true;
 				}
 			}
 
