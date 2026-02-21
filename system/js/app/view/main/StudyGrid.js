@@ -106,7 +106,9 @@ Ext.define('MdiApp.view.main.StudyGrid',{
 
 					let refreshTask = {             
 					    run: function() {
-					        self.store.reload();
+					    	if(!self.store.isLoading()){
+					        	self.store.reload();
+					    	}
 					    },
 					    interval: 30 * 1000 
 					};
