@@ -1,7 +1,7 @@
 Ext.define('MdiApp.view.main.StudyGrid',{
 	extend : 'Ext.grid.Panel',
 	frame : true,
-	requires:['MdiApp.view.main.StudyGridContextMenu'],
+	requires:['MdiApp.view.main.StudyGridContextMenu','Ext.util.TaskRunner'],
 	selModel:{mode: 'MULTI'},
 	multiselect:'true',
 	
@@ -102,6 +102,18 @@ Ext.define('MdiApp.view.main.StudyGrid',{
                 fields: ['uid','patientid','modality', 'datetime', 'reviewed', /*'patientname',*/ 'lastname', 'firstname', 'institution' , 'referringphysician', 'description', 'reviewed_text', 'is_critical', 'critical_date', 'mailed_date', 'images_cnt', 'has_attached_orders', 'note_date', 'note_text', 'note_user', 'dob', 'has_tech_notes']
                 });
 				self.store=Ext.create('MdiApp.store.StudyStore',{});
+
+
+					let refreshTask = {             
+					    run: function() {
+					        self.store.reload();
+					    },
+					    interval: 30 * 1000 
+					};
+
+					let task=new Ext.util.TaskRunner()
+					task.start(refreshTask);
+
 				var pagingBar = new Ext.PagingToolbar({
 //                    pageSize: 15,
                     store: self.store,
