@@ -48,11 +48,11 @@ if($var["action"] == "login")
 					$entry = isset($_GET['entry']) ? urlencode($_GET['entry']) : ''; // Ensure 'entry' is safe to use in the URL
 					
 					// Redirect to the DICOM viewer page with the sanitized 'entry' parameter
-					header("Location: https://apiprinciple.com/system/html5viewer/index.php?entry=$entry&actions=DicomViewer");
+					header("Location: http://18.221.194.47/system/html5viewer/index.php?entry=$entry&actions=DicomViewer");
 					exit();
 				} else {
 					// Redirect to the default page if 'actions' is not 'DicomViewer'
-					header("Location: https://apiprinciple.com/index.php");
+					header("Location: http://18.221.194.47/index.php");
 					exit();
 				}
 			}
