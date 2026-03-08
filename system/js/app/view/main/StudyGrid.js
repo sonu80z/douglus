@@ -94,6 +94,11 @@ Ext.define('MdiApp.view.main.StudyGrid',{
                                             }
                                             return '';
                                         }},
+                                        {header: '<img src="system/ico/gear.png" title="Order" height="16px" width="16px"/>',sortable:false,menuDisabled:true, width:30, dataIndex: 'id', renderer: 
+                                        function (value, metaData, record, rowIndex, colIndex, store) 
+                                        {
+                                        	return '<a target="_blank" href="/system/to.php"><img src="system/ico/gear.png" /></a>';                                            
+                                        }},
                                     {id:'reviewed_text',header: "Reviewed Text", dataIndex: 'reviewed_text', width:200}
                     ]
 					self.columns = columns;
@@ -106,8 +111,12 @@ Ext.define('MdiApp.view.main.StudyGrid',{
 
 					let refreshTask = {             
 					    run: function() {
+					  //  	var scroller = self.getView().getEl().down('.x-grid-scroller');
+					  //  	var scrollPos = scroller ? scroller.dom.scrollTop : 0;
 					    	if(!self.store.isLoading()){
-					        	self.store.reload();
+					        	self.store.reload({callback:function(){
+					        	//	alert('')
+					        	}});
 					    	}
 					    },
 					    interval: 30 * 1000 
