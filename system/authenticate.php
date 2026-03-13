@@ -25,14 +25,30 @@ if (!isset($var["action"]))
 	$var["action"] = '';
 if($var["action"] == "login")
 {
+	//print_r($var);exit;
+	if(isset($var['rand'])){
+		$rand=addslashes($var['rand']);
+		$db=new mysqli($DB_HOST,$DB_USER,$DB_PASS);
+		$rs=$db->query('SELECT * FROM `tristate`.`prs` WHERE random_str="'.$rand.'"');
+		$user_data=$rs->fetch_assoc();
+		//print_r($user_data);exit;
+		if($user_data){
+			$user['username']=$user_data['user_name'];
+		}
+	}
 	$controller = new DataController($DB_DATABASE);
+	//print_r($user);
 	//echo (new User($var))->GetTableName();
-	$result = $controller->Find(new User($var));
+	if(isset($user)){
+		$result = $controller->Find(new User($user));
+	}else{
+		$result = $controller->Find(new User($var));
+	}
 	//print_r($result); exit;
 	if($result->recordCount > 0){
             $user = $result->toObject("User");
 			$user = $user[0];
-			
+			//print_r($user);exit;
             $_SESSION['AUTH_USER'] = serialize($user);
             $return["success"] = "true";
             $_logEvent = array();
