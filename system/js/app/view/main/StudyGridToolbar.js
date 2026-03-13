@@ -63,6 +63,12 @@ Ext.define('MdiApp.view.main.StudyGridToolbar',{
 										var parent=self.findParentByType('studymainview')
 										parent.setActiveItem('create-study')
 									}},
+									{text:'New Order', iconCls:'ico-neworder',  id:'menu-create-new-order', handler:function(){
+										alert('order')
+									}},
+									{text:'Forward', iconCls:'ico-forward',  id:'menu-create-new-forward', handler:function(grid){
+										alert('forward')
+									}},
                                     '->',
                                     {text:'Advanced Search', id:'filter-advanced-search', handler: function()
                                         {

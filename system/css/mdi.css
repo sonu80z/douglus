@@ -40,6 +40,8 @@ html, body{height:100%; width:100%}
 .ico-legend{background-image:url(../ico/legend.png) !important;}
 .ico-burncd{background-image:url(../ico/burncd.png) !important;}
 .ico-newstudy{background-image:url(../ico/add.png) !important;}
+.ico-neworder{background-image:url(../ico/add_order.png) !important;}
+.ico-forward{background-image:url(../ico/forward-arrow.png) !important;}
 .ico-critical{background-image:url(../ico/att.png) !important;}
 .ico-uncritical{background-image:url(../ico/uncritical.png) !important; background-repeat:no-repeat;}
 .ico-order{background-image:url(../ico/order.png) !important; background-repeat:no-repeat;}
