@@ -7,6 +7,6 @@
 </head>
 <body>
 	
-	<h4>Username <?php echo $user['username']; ?> do not exist in app, please contact admin</h4>
+	<h4>Username "<?php echo $user['username']; ?>" do not exist in app, please contact admin</h4>
 </body>
 </html>
