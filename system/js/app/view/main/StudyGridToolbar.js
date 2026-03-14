@@ -63,7 +63,7 @@ Ext.define('MdiApp.view.main.StudyGridToolbar',{
 										var parent=self.findParentByType('studymainview')
 										parent.setActiveItem('create-study')
 									}},
-									{text:'New Order', iconCls:'ico-neworder',  id:'menu-create-new-order', href: 'http://18.221.194.47/bigskyooe/admin/order/add?from=dashboard', // The URL to navigate to
+									{text:'New Order', iconCls:'ico-neworder',  id:'menu-create-new-order', href: 'system/to_bigskyooe.php', // The URL to navigate to
     hrefTarget: '_blank', handler:function(){
 										
 									}},
