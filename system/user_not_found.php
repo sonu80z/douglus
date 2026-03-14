@@ -6,8 +6,7 @@
 	<title>User not found</title>
 </head>
 <body>
-	<?php
-	print_r($user);
-	?>
+	
+	<h4>Username <?php echo $user['username']; ?> do not exist in app, please contact admin</h4>
 </body>
 </html>
