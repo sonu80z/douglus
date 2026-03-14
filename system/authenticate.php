@@ -76,6 +76,10 @@ if($var["action"] == "login")
 	}else{
 		//edit this message if you want to change what is said for login failure
 		$return["error"] = array('type'=>'Login Failure',  'message'=>'Login Failed, invalid password or username.');
+		if(isset($rand)){
+			include 'user_not_found.php';
+			exit();
+		}
 	}
 	
 }else if($var["action"]=="logout"){
