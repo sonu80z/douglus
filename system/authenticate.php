@@ -31,13 +31,16 @@ if($var["action"] == "login")
 		$db=new mysqli($DB_HOST,$DB_USER,$DB_PASS);
 		$rs=$db->query('SELECT * FROM `tristate`.`prs` WHERE random_str="'.$rand.'"');
 		$user_data=$rs->fetch_assoc();
-		//print_r($user_data);exit;
 		if($user_data){
 			$user['username']=$user_data['user_name'];
+		}else{
+			include 'link_expired.php';
+			exit();
 		}
+
 	}
 	$controller = new DataController($DB_DATABASE);
-	//print_r($user);
+	//print_r($user);exit;
 	//echo (new User($var))->GetTableName();
 	if(isset($user)){
 		$result = $controller->Find(new User($user));
