@@ -150,6 +150,7 @@ else
 
 /* QUERY DEFAULT CONFIG START */
 $columns = "
+
 		study.uuid as uid
 		,study.patientid
 		,study.referringphysician
@@ -187,7 +188,9 @@ $columns = "
 		DATE_FORMAT(note_date, '%m/%d/%Y %H:%i') as note_date,
 		note_text,
 		note_user,
-		has_tech_notes
+		has_tech_notes,
+		study.StudyStatus
+		
 ";
 //this is a special condition that allows us to pull results based on username
 if(trim($user->lastname) != "" && $user->lastname != "null"){

@@ -120,7 +120,7 @@ class MySQLRecordReader implements IRecordReader{
 		while ($row = $this->GetNextAssoc()){
 			$jsonRow = array();
 			foreach($row as $col=>$val){
-				array_push($jsonRow, strtolower($col).":'".mysqli_real_escape_string($this->connection, $val)."'");	
+				array_push($jsonRow, strtolower($col).":'".mysqli_real_escape_string($this->connection, (is_null($val)?'':$val))."'");	
 			}
 			array_push($json, "{".join(',',$jsonRow)."}");	
 		}

@@ -94,7 +94,7 @@ Ext.define('MdiApp.view.main.StudyGrid',{
                                             }
                                             return '';
                                         }},
-                                    
+                                    {id:'StudyStatus',header: "Study Status", dataIndex: 'studystatus', width:100},
                                     {id:'reviewed_text',header: "Reviewed Text", dataIndex: 'reviewed_text', width:200}
                     ]
 					self.columns = columns;
