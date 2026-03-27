@@ -1,6 +1,8 @@
 <?php 
-@session_cache_limiter('private');
-@session_start();
+if(PHP_SESSION_ACTIVE!=session_status()){
+	session_cache_limiter('private');
+	session_start();
+}
 /**********************************************************
  *--------------- NOTICE DON'T FORGET --------------------*
  **********************************************************/

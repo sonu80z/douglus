@@ -7,7 +7,7 @@
 // CopyRight (c) 2003-2008 RainbowFish Software
 //
 //define('EXPORT_DIR','C:/Program Files/PacsOne/export/');
-define('EXPORT_DIR','C:/Program Files/PacsOne/export/');
+define('EXPORT_DIR','C:/Program Files/BigSkyPacs/export/');
 
 define('ZIP_ISO_DIR','C:\\Program Files\\PacsOne\\php\\RPRS\\system\\zip_iso\\');
 //define('ZIP_ISO_DIR','C:\\Program Files\\PacsOne\\php\\zip_iso\\');
@@ -49,8 +49,8 @@ $username = $user->username;
 $action = $_REQUEST['actions'];
 if (isset($_REQUEST['actionvalue']))
     $action = $_REQUEST['actionvalue'];
-$option = $_REQUEST['option'];
-$entry = $_REQUEST['entry'];
+$option = isset($_REQUEST['option'])?$_REQUEST['option']:'';
+$entry = isset($_REQUEST['entry'])?$_REQUEST['entry']:'';
 import('system.logger');
 	
 if($echo) echo '<br />'.__LINE__;
@@ -384,7 +384,7 @@ function zipBuilder($filename){
 	
 }
 
-if (strcasecmp($_GET['action'], "DownloadZip") == 0) 
+if (isset($_GET['action']) and (strcasecmp($_GET['action'], "DownloadZip") == 0)) 
 {
 	//set_error_handler('err_h');
     require_once ('legacy/download.php');	
@@ -479,7 +479,7 @@ if (strcasecmp($action, "deleteJobQue") == 0) {
 if (strcasecmp($action, "createZIP") == 0) 
 {
 	$db = MySQLDatabase::GetInstance();
-	
+	$conn=MySQLDatabase::getConnection2();
 	//$q = "select * from dbjob ";
 	
 	//print_r($db->ExecuteReader($q)->GetNextAssoc());exit;
@@ -493,8 +493,6 @@ if (strcasecmp($action, "createZIP") == 0)
 	$label =  trim($option);
 	$directory=EXPORT_DIR;
 	$directory=str_replace('\\','/',$directory);
-	$query = "insert into dbjob (username,aetitle,type,class,uuid,priority,status,details) values";
-    $query .= "('$username','_$size','$type','$level','$label',$viewer,'created','$directory')";
 	$filename =  trim($option);
 	$filename=$directory.$filename; 
 	
@@ -510,13 +508,20 @@ if (strcasecmp($action, "createZIP") == 0)
 	$query="insert into dbjob (username,aetitle,type,class,uuid,priority,status,details) 
 						values('root','_650','export','study','testdir',0,'created','$filename')";
 	
-	$study_record = $db->ExecuteReader($query)->GetNextAssoc();
+	
+	$result=$conn->query($query);
+	if(!$result){
+		echo json_encode(array('success'=>false,'msg'=>'Fail to insert data in dbjob'));
+		exit;
+	}
 	
 	$filename =  trim($option);
 	
+	$result=$conn->query('SELECT LAST_INSERT_ID() AS id');
+
+	$result=$result->fetch_assoc();
 	
-	
-	$result=$db->ExecuteReader('SELECT LAST_INSERT_ID() AS id')->GetNextAssoc();
+	//$result=$db->ExecuteReader('SELECT LAST_INSERT_ID() AS id')->GetNextAssoc();
 	
 	$id=$result['id'];
 	
@@ -525,21 +530,25 @@ if (strcasecmp($action, "createZIP") == 0)
             $uid = urldecode($uid);
             $uid = get_magic_quotes_gpc()? $uid : addslashes($uid);
         }
-		$db->ExecuteReader("replace export set jobid=$id,class='study',uuid='$uid'");
+        $conn->query("replace export set jobid=$id,class='study',uuid='$uid'");
+		//$db->ExecuteReader("replace export set jobid=$id,class='study',uuid='$uid'");
     }
+    //echo 'kjhkhk';
 	$q = "update dbjob set status='submitted',submittime=NOW() where id=$id";
-	$db->ExecuteReader($q);
-	
+	$conn->query($q);
+	//$db->ExecuteReader($q);
 	$user=unserialize($_SESSION['AUTH_USER']);
 	//print_r(unserialize($_SESSION['AUTH_USER']));
 	$query = "insert into schedule (`user_id`,`dbjob_id`,`type`,`status`,`created`,`filename`) values";
     $query .= "({$user->id},$id,'zip','pending',NOW(),'$filename')";
-	//print_r($query);exit;
-	$study_record = $db->ExecuteReader($query)->GetNextAssoc();
-	$result=$db->ExecuteReader('SELECT LAST_INSERT_ID() AS id')->GetNextAssoc();
+	$conn->query($query);
+	//$study_record = $db->ExecuteReader($query)->GetNextAssoc();
+	$result=$conn->query('SELECT LAST_INSERT_ID() AS id');
+	$result=$result->fetch_assoc();
 	$schedule_id=$result['id'];
 	$query="INSERT INTO schedule_dbjob (`schedule_id`,`dbjob_id`) VALUES($schedule_id,$id)";
-	$study_record = $db->ExecuteReader($query)->GetNextAssoc();
+	$conn->query($query);
+	//$study_record = $db->ExecuteReader($query)->GetNextAssoc();
 	echo json_encode(array('success'=>true,'data'=>$schedule_id));
 	return;
 	
