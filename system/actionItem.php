@@ -468,10 +468,12 @@ if (strcasecmp($action, "getJobQue") == 0) {
 
 if (strcasecmp($action, "deleteJobQue") == 0) {
 	$db = MySQLDatabase::GetInstance();
+	$conn=MySQLDatabase::getConnection2();
 	$id=$_REQUEST['id'];
 	$user=unserialize($_SESSION['AUTH_USER']);
 	$query="DELETE FROM schedule WHERE  id=$id AND user_id={$user->id} ";
-	$result=$db->ExecuteReader($query);
+	//$result=$db->ExecuteReader($query);
+	$result=$conn->query($query);
 	echo json_encode(array('success'=>(bool)$result));
 	exit;
 }
@@ -572,6 +574,7 @@ if (strcasecmp($action, "createZIP") == 0)
 if (strcasecmp($action, "createISO") == 0) 
 {
 	$db = MySQLDatabase::GetInstance();
+	$conn=MySQLDatabase::getConnection2();
 	
 	//$q = "select * from dbjob ";
 	
@@ -586,8 +589,8 @@ if (strcasecmp($action, "createISO") == 0)
 	$label =  trim($option);
 	$directory=EXPORT_DIR;
 	$directory=str_replace('\\','/',$directory);
-	$query = "insert into dbjob (username,aetitle,type,class,uuid,priority,status,details) values";
-    $query .= "('$username','_$size','$type','$level','$label',$viewer,'created','$directory')";
+	//$query = "insert into dbjob (username,aetitle,type,class,uuid,priority,status,details) values";
+    //$query .= "('$username','_$size','$type','$level','$label',$viewer,'created','$directory')";
 	$filename =  trim($option);
 	$filename=$directory.$filename; 
 	
@@ -603,13 +606,16 @@ if (strcasecmp($action, "createISO") == 0)
 	$query="insert into dbjob (username,aetitle,type,class,uuid,priority,status,details) 
 						values('root','_650','export','study','testdir',0,'created','$filename')";
 	
-	$study_record = $db->ExecuteReader($query)->GetNextAssoc();
+	$conn->query($query);
+	//$study_record = $db->ExecuteReader($query)->GetNextAssoc();
 	
 	$filename =  trim($option);
 	
 	
 	
-	$result=$db->ExecuteReader('SELECT LAST_INSERT_ID() AS id')->GetNextAssoc();
+	//$result=$db->ExecuteReader('SELECT LAST_INSERT_ID() AS id')->GetNextAssoc();
+	$result=$conn->query('SELECT LAST_INSERT_ID() AS id');
+	$result=$result->fetch_assoc();
 	
 	$id=$result['id'];
 	
@@ -618,21 +624,27 @@ if (strcasecmp($action, "createISO") == 0)
             $uid = urldecode($uid);
             $uid = get_magic_quotes_gpc()? $uid : addslashes($uid);
         }
-		$db->ExecuteReader("replace export set jobid=$id,class='study',uuid='$uid'");
+		//$db->ExecuteReader("replace export set jobid=$id,class='study',uuid='$uid'");
+		$result=$conn->query("replace export set jobid=$id,class='study',uuid='$uid'");
     }
 	$q = "update dbjob set status='submitted',submittime=NOW() where id=$id";
-	$db->ExecuteReader($q);
+	//$db->ExecuteReader($q);
+	$conn->query($q);
 	
 	$user=unserialize($_SESSION['AUTH_USER']);
 	//print_r(unserialize($_SESSION['AUTH_USER']));
 	$query = "insert into schedule (`user_id`,`dbjob_id`,`type`,`status`,`created`,`filename`) values";
     $query .= "({$user->id},$id,'iso','pending',NOW(),'$filename')";
 	//print_r($query);exit;
-	$study_record = $db->ExecuteReader($query)->GetNextAssoc();
-	$result=$db->ExecuteReader('SELECT LAST_INSERT_ID() AS id')->GetNextAssoc();
+	//$study_record = $db->ExecuteReader($query)->GetNextAssoc();
+	$conn->query($query);
+	//$result=$db->ExecuteReader('SELECT LAST_INSERT_ID() AS id')->GetNextAssoc();
+	$result=$conn->query('SELECT LAST_INSERT_ID() AS id');
+	$result=$result->fetch_assoc();
 	$schedule_id=$result['id'];
 	$query="INSERT INTO schedule_dbjob (`schedule_id`,`dbjob_id`) VALUES($schedule_id,$id)";
-	$study_record = $db->ExecuteReader($query)->GetNextAssoc();
+	//$study_record = $db->ExecuteReader($query)->GetNextAssoc();
+	$conn->query($query);
 	echo json_encode(array('success'=>true,'data'=>$schedule_id));
 	return;
 	
