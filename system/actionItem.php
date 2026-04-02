@@ -15,7 +15,10 @@ define('ZIP_ISO_DIR','C:\\Program Files\\PacsOne\\php\\RPRS\\system\\zip_iso\\')
 //define('EFILM_DIR','');
 session_start();
 error_reporting(E_ALL);
-
+function error_handler($errno, $errstr, $errfile, $errline){
+	echo $errno, ' : ', $errstr,' : ', $errfile, ' : ', $errline, "\n";
+}
+set_error_handler('error_handler');
 //ob_start();
 // disable PHP timeout
 set_time_limit(0);
