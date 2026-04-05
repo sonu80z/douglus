@@ -26,6 +26,84 @@ Ext.namespace('MdiApp').study = {
                             Ext.Msg.warn("Select a study to view the report");
                         }
 	},
+	forward:function(grid){
+		if(grid.getSelectionModel().getCount()){
+                            var id = grid.getSelection()[0].data.uid;
+                            let win=Ext.create('Ext.Window',{
+                            	width : 500,
+                            	height : 300,
+                            	modal:true,
+                            	frame:true,
+                            	layout : 'fit',
+                            	items : [
+                            		{
+                            			xtype : 'form',
+                            			frame : true,
+                            			items : [
+                            				{
+                            					fieldLabel : 'Please select which Application Entity to forward to',
+                            					xtype : 'combo'
+                            				},
+                            				{
+                            					xtype: 'fieldset',
+                            					title : 'Please select forwarding schedule',
+                            					layout: 'hbox',
+                            					items : [
+		                            				{
+		                            					xtype: 'radiofield',
+		                            					name:'schedule',
+		                            					fieldLabel : 'Immediately',
+		                            					value:-1,
+		                            					checked:true
+		                            				},
+		                            				{
+		                            					xtype : 'radiofield',
+		                            					name:'schedule',
+		                            					fieldLabel : 'At this hour',
+		                            					value:0,
+		                            					listeners : {
+		                            						change : function(radio, newValue, oldValue, eOpts){
+		                            							if(newValue){
+		                            								Ext.getCmp('hour-field').setVisible(true)
+		                            								//alert('true')
+		                            							}else{
+		                            								Ext.getCmp('hour-field').setVisible(false)
+		                            								//alert('false')
+		                            							}
+		                            						}
+		                            					}
+		                            				},
+		                            				{
+		                            					 xtype: 'timefield',
+		                            					 name : 'hour',
+		                            					 id : 'hour-field',
+		                            					 hidden : true
+		                            				}
+		                            			]
+		                            		}
+                            			]
+                            		}
+                            	],
+                            	buttons : [
+                            		{
+                            			text : 'Forward',
+                            			handler : function(){
+                            				alert('f')
+                            			}
+                            		},
+                            		{
+                            			text : 'Close',
+                            			handler : function(){
+                            				win.close();
+                            			}
+                            		}
+                            	]
+                            });
+                            win.show();
+		}else{
+			Ext.Msg.warn("Select a study to view the report");
+		}
+	},
 	viewPriors:function(grid){
 				//var grid=this.getView()
 				if(grid.getSelectionModel().getCount()){

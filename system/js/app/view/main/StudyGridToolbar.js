@@ -67,8 +67,8 @@ Ext.define('MdiApp.view.main.StudyGridToolbar',{
     hrefTarget: '_blank', handler:function(){
 										
 									}},
-									{text:'Forward', iconCls:'ico-forward',  id:'menu-create-new-forward', handler:function(grid){
-										alert('forward')
+									{text:'Forward', iconCls:'ico-forward',  id:'menu-create-new-forward', handler:function(){
+										MdiApp.study.forward(grid)
 									}},
                                     '->',
                                     {text:'Advanced Search', id:'filter-advanced-search', handler: function()
