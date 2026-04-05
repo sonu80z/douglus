@@ -9,7 +9,7 @@
 //define('EXPORT_DIR','C:/Program Files/PacsOne/export/');
 define('EXPORT_DIR','C:/Program Files/BigSkyPacs/export/');
 
-define('ZIP_ISO_DIR','C:\\Program Files\\PacsOne\\php\\RPRS\\system\\zip_iso\\');
+define('ZIP_ISO_DIR','C:\\Program Files\\app\\system\\zip_iso\\');
 //define('ZIP_ISO_DIR','C:\\Program Files\\PacsOne\\php\\zip_iso\\');
 
 //define('EFILM_DIR','');
@@ -610,6 +610,7 @@ if (strcasecmp($action, "createISO") == 0)
 						values('root','_650','export','study','testdir',0,'created','$filename')";
 	
 	$conn->query($query);
+	
 	//$study_record = $db->ExecuteReader($query)->GetNextAssoc();
 	
 	$filename =  trim($option);
