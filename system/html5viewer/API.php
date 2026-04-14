@@ -1,5 +1,5 @@
 <?php
-
+header('Content-Type: application/javascript');
 session_cache_limiter('private');
 session_start();
 
@@ -22,7 +22,7 @@ import('system.core.orm.DataController');
 //include_once('dicom.php');
 
 //application/json
-header("content-type: application/json");
+//header("content-type: application/json");
 
 $controller = new DataController($DB_DATABASE);
 
