@@ -2,7 +2,7 @@ Ext.define('MdiApp.view.admin.AddEditGroupWindow',{
 	extend : 'Ext.Window',
 	//closeAction:'hide', 
 	modal:true,
-	width:750,
+	width:760,
 	height:592,
 	resizable:false,
 	title:'Add Group',
@@ -15,6 +15,10 @@ Ext.define('MdiApp.view.admin.AddEditGroupWindow',{
 		var self=this;
 		var grid=config.grid
 		var buttons=[];
+        let groupid;
+        if(config.data && config.data.id){
+            groupid=config.data.id;
+        }
 		var getGridStoreData= function(grid, field){
                 var store = grid.getStore();
                 var records = store.getRange(0, store.getCount());
@@ -122,6 +126,9 @@ Ext.define('MdiApp.view.admin.AddEditGroupWindow',{
                         title:"Group Users",
                         
                 });
+        groupUserGrid.getStore().reload({
+            params : {groupid:groupid}
+        })
 		var groupTypeComboBox = new Ext.form.ComboBox({
                         store: groupTypeStore,
                         //editable:false,

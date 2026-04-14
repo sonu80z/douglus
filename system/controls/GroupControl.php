@@ -33,7 +33,14 @@ class GroupControl extends Control
 	public function ViewGroupUsers($args){
 		$params = $this->GetQueryParams($args);
 		$db = MySQLDatabase::GetInstance();
-		return $db->ExecuteReader("select u.id, u.username from rprs_users u join rprs_group_users gu on gu.userid = u.id where gu.groupid = ".$args["groupid"]. " order by u.username")->toJSON();
+//		return $db->ExecuteReader("select u.id, u.username from rprs_users u join rprs_group_users gu on gu.userid = u.id where gu.groupid = ".$args["groupid"]. " order by u.username")->toJSON();
+		return $db->ExecuteReader("select u.id, u.username from rprs_users u join rprs_group_users gu on gu.userid = u.id where gu.groupid = ".$_POST["groupid"]. " order by u.username")->toJSON();
+	}
+	public function ViewGroupNotUsers($args){
+		$params = $this->GetQueryParams($args);
+		$db = MySQLDatabase::GetInstance();//print_r($_REQUEST);
+		//return $db->ExecuteReader("select DISTINCT(u.id), u.username from rprs_users u LEFT OUTER join rprs_group_users gu on gu.userid = u.id where gu.groupid != ".$_REQUEST["groupid"]. " OR ISNULL(gu.groupid) order by u.username")->toJSON();
+		return $db->ExecuteReader("select DISTINCT(u.id), u.username from rprs_users u LEFT OUTER join rprs_group_users gu on gu.userid = u.id  order by u.username")->toJSON();
 	}
 	public function ViewGroupTypeCriteria($args){
 		if(isset($args["grouptypeid"])){
