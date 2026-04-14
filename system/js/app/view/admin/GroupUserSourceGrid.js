@@ -3,9 +3,12 @@ Ext.define('MdiApp.view.admin.GroupUserSourceGrid',{
 	multiselect:'true',
 	selModel:{mode: 'MULTI'},
 	region:"west",
+	plugins: 'gridfilters',
 	columns: [
 			{header: 'ID',  width: 100, sortable: false, dataIndex: 'id', hidden:true},
-			{header: 'User Name', id:'username',  width: 330, sortable: true, dataIndex: 'username'}
+			{header: 'User Name', id:'username',  width: 330, sortable: true, dataIndex: 'username',filter:{
+				type: 'string'
+			}}
 	],	
 	autoScroll:true,
 	stripeRows: true,
