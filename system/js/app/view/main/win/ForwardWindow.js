@@ -1,6 +1,8 @@
 Ext.define('MdiApp.view.main.win.ForwardWindow',{
 	extend : 'Ext.Window',
 	title:'Forward',
+	modal : true,
+	layout : 'fit',
 	constructor : function(config){
 		var self=this;
 		let grid=config.grid
@@ -30,7 +32,8 @@ Ext.define('MdiApp.view.main.win.ForwardWindow',{
 		    queryMode: 'remote',
 		    displayField: 'title',
 		    valueField: 'title',
-		    name : 'aetitle'
+		    name : 'aetitle',
+		    allowBlank : false
 		});
 		let form=Ext.create('Ext.form.Panel',{
 			items : [
@@ -54,23 +57,26 @@ Ext.define('MdiApp.view.main.win.ForwardWindow',{
 				waitMsg : 'Submitting data...',
 				waitTitle : 'Please wait',
 				handler : function(btn){
-					btn.disable()
-					form.getForm().submit({
-						url : '/system/actionItem.php?actions=forward',
-						method : 'POST',
-						success: function(form, action) {
-       						Ext.Msg.alert('Success', action.result.msg);
-       						btn.enable()
-    					},
-    					failure : function(form, action){
-    						btn.enable()
-    						Ext.Msg.alert('Error', 'Some error occur');
-    					}
-					})
+					if(form.getForm().isValid()){
+						btn.disable()
+						form.getForm().submit({
+							url : '/system/actionItem.php?actions=forward',
+							method : 'POST',
+							success: function(form, action) {
+	       						Ext.Msg.alert('Success', action.result.msg);
+	       						btn.enable()
+	    					},
+	    					failure : function(form, action){
+	    						btn.enable()
+	    						Ext.Msg.alert('Error', 'Some error occur');
+	    					}
+						})
+					}else{
+						Ext.Msg.alert('Check the form','Some fields are not valid');
+					}
 				}
 			}
 		]
-		self.modal=true
 		self.items=[form]
 		this.callParent(arguments);
 	}

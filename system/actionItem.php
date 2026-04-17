@@ -968,7 +968,7 @@ if($action=='forward')
 	$conn=MySQLDatabase::getConnection2();
 	$query='INSERT INTO `dbjob` ( `username`, `aetitle`, `type`, `class`, `uuid`, `schedule`, `priority`, `submittime`,`status`) VALUES ("root", "'.$aetitle.'","Forward","study","'.$uid.'",-1,1,NOW(),"submitted")';
 	$result=$conn->query($query);
-	$response=array('success'=>(bool)$result,'msg'=>(string)$result);
+	$response=array('success'=>(bool)$result,'msg'=>($result?'Forwarded succesfully':'Some error occued'));
 	echo json_encode($response);
 	exit();
 }
