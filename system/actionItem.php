@@ -769,7 +769,7 @@ function isofile($filename){
 }
 
 
-if (strcasecmp($_GET['action'], "DownloadIso") == 0) 
+if (isset($_GET['action']) and strcasecmp($_GET['action'], "DownloadIso") == 0) 
 {
 	//set_error_handler('err_h');
     require_once ('legacy/download.php');	
@@ -944,6 +944,33 @@ if ($action == "Mark Study as Uncritical")
 	logger::log($_logEvent);
 	
 	$return["success"]  = "true";
+}
+
+if($action=='getApplentity')
+{
+	$db = MySQLDatabase::GetInstance();
+	$query='SELECT title from applentity where ipaddr !=""';
+	$result=$db->ExecuteReader($query);
+	$records=array();
+	while($record=$result->GetNextAssoc()){
+		$records[]=$record;
+	}
+	$response=array('recordcount'=>count($records),'data'=>$records);
+	echo json_encode($response);
+	exit();
+}
+
+if($action=='forward')
+{
+	$aetitle=addslashes($_REQUEST['aetitle']);
+	$uid=addslashes($_REQUEST['uid']);
+	$db = MySQLDatabase::GetInstance();
+	$conn=MySQLDatabase::getConnection2();
+	$query='INSERT INTO `dbjob` ( `username`, `aetitle`, `type`, `class`, `uuid`, `schedule`, `priority`, `submittime`,`status`) VALUES ("root", "'.$aetitle.'","Forward","study","'.$uid.'",-1,1,NOW(),"submitted")';
+	$result=$conn->query($query);
+	$response=array('success'=>(bool)$result,'msg'=>(string)$result);
+	echo json_encode($response);
+	exit();
 }
 
 print JSON::Encode($return);
