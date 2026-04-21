@@ -15,6 +15,11 @@ import('system.utilities.JSON');
 import('system.models.User');
 import('system.logger');
 
+$https=false;
+if(isset($_SERVER['HTTPS']) and $_SERVER['HTTPS']=='on'){
+	$https=true;
+}
+
 function randStr(){
     $rand=rand();
     $rand=md5($rand);
@@ -29,7 +34,11 @@ if(!empty($_SESSION['AUTH_USER'])){
 		$db=new mysqli($DB_HOST,$DB_USER,$DB_PASS);
 		$rs=$db->query('INSERT INTO `tristate`.`to_bigskyooe` (`rand`,`username`) VALUES("'.addslashes($rand).'","'.$user->username.'")');
 		if($rs){
-			header('Location: http://18.221.194.47/bigskyooe/admin/auth/login2/'.$rand);
+			if($https)
+				$url='https://'.$_SERVER['HTTP_HOST'].'/bigskyooe/admin/auth/login2/'.$rand;
+			else
+				$url='http://'.$_SERVER['HTTP_HOST'].'/bigskyooe/admin/auth/login2/'.$rand;
+			header('Location: '.$url);
 			exit;
 		}else{
 			echo 'Error';
