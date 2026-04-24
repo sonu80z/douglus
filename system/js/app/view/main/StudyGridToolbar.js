@@ -30,7 +30,7 @@ Ext.define('MdiApp.view.main.StudyGridToolbar',{
                             }
                         }
                     });
-			var searchCombo=Ext.create('Ext.form.field.Text',{
+			var searchCombo=Ext.create('Ext.form.field.ComboBox',{
                                         store: config.mainGridStore,
                                         width:210,
 										//id : 'searchCombo',

@@ -114,14 +114,14 @@ if(isset($var['search']) && $var['search'] != "")
 
 	}
 	if(count($and) > 0){
-		array_push($or, "(".join($and, " AND ").")");
+		array_push($or, "(".join(" AND ",$and).")");
 	}
     // about || $col == 'study.patientid' - we have 2 patients with simulary IDs. So we must use "=", not like
 	if($col == 'study.studydate' || $col == 'study.patientid')
 		array_push($or, $col." = '".convertDateForMysql($var['search'])."'");
 	else
 		array_push($or, $col." like '%".convertDateForMysql($var['search'])."%'");	
-	$conditions = "(".join($or, " OR ").")";
+	$conditions = "(".join(" OR ",$or).")";
 }
 /* CREATING SEARCH CONDITIONS END*/
 
